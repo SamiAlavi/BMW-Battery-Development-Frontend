@@ -1,1 +1,1 @@
-# BMW---Battery-Development-Front-End-
+# BMW - Battery Development (Front End)
