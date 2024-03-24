@@ -7,7 +7,7 @@ import 'primereact/resources/primereact.min.css'; //core css
 import 'primeicons/primeicons.css'; //icons
 import 'primeflex/primeflex.css'; // flex
 
-function App() {
+export default function App() {
   const value = {
     ripple: true,
   };
@@ -18,5 +18,3 @@ function App() {
     </PrimeReactProvider>
   );
 }
-
-export default App
