@@ -1,5 +1,5 @@
 import './App.css'
-import MyApp from './MyApp';
+import Dashboard from './Dashboard';
 import { PrimeReactProvider } from 'primereact/api';
 
 import 'primereact/resources/themes/lara-light-indigo/theme.css'; //theme
@@ -14,7 +14,7 @@ export default function App() {
 
   return (
     <PrimeReactProvider value={value}>
-        <MyApp />
+        <Dashboard />
     </PrimeReactProvider>
   );
 }
