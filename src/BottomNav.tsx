@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Dock } from 'primereact/dock';
 import { Dialog } from 'primereact/dialog';
 import { MenuItem } from 'primereact/menuitem';
+import { FileUpload } from 'primereact/fileupload';
+import './BottomNav.css'
         
 
 export default function BottomNav() {
@@ -24,9 +26,16 @@ export default function BottomNav() {
                 model={dockItems}/>
             <Dialog
                 visible={displayFileUploader}
+                header={'Upload File'}
                 style={{ width: '30vw', height: '18rem' }}
                 onHide={() => setDisplayFileUploader(false)}
-                maximizable blockScroll={true}>
+                blockScroll={true}>
+                <FileUpload
+                    name="demo[]"
+                    url={'/api/upload'}
+                    accept="image/*"
+                    mode="advanced"
+                    emptyTemplate={<p className="m-0">Drag and drop file here to upload.</p>} />    
             </Dialog>
         </div>
     );
