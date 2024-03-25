@@ -4,6 +4,7 @@ import { Dialog } from 'primereact/dialog';
 import { MenuItem } from 'primereact/menuitem';
 import { FileUpload } from 'primereact/fileupload';
 import './BottomNav.css'
+import uploadImage from "./assets/upload-6699084.svg";
         
 
 export default function BottomNav() {
@@ -11,8 +12,8 @@ export default function BottomNav() {
 
     const dockItems: MenuItem[] = [
         {
-            label: 'Finder',
-            icon: () => <img alt="Finder" src="https://primefaces.org/cdn/primereact/images/dock/finder.svg" width="100%" />,
+            label: 'Upload File',
+            icon: () => <img alt="Upload File" src={uploadImage} width="100%" />,
             command: () => {
                 setDisplayFileUploader(true);
             }
