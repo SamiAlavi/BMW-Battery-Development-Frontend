@@ -4,7 +4,7 @@ import BottomNav from './BottomNav';
 import { useState } from 'react';
 
 export default function Dashboard() {
-  const [isSidebarVisible, setSidebarVisible] = useState<boolean>(false);
+  const [isSidebarVisible, setSidebarVisible] = useState<boolean>(true);
 
   const onSidebarButtonClick = (value: boolean) => {
     setSidebarVisible(value);

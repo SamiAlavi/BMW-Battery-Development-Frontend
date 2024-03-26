@@ -7,10 +7,19 @@ interface Props {
 }
 
 const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
+    const customHeader = (
+        <div className="flex align-items-center">
+            <h2>Choose Data</h2>
+        </div>
+    );
+
     return (
         <div className="sidebar-container">
-            <Sidebar visible={visible} onHide={() => onSidebarButtonClick(false)} className="glass-sidebar w-full md:w-20rem lg:w-30rem ">
-                <h2>Sidebar</h2>
+            <Sidebar
+                visible={visible}
+                onHide={() => onSidebarButtonClick(false)}
+                className="glass-sidebar w-full md:w-20rem lg:w-30rem"
+                header={customHeader}>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
                     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
