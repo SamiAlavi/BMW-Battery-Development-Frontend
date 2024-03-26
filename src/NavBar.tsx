@@ -13,7 +13,7 @@ const NavBar: React.FC<Props> = ({ onSidebarButtonClick }) =>  {
 
     const start = (
         <div className="flex align-items-center gap-2">
-            <Button icon="pi pi-align-justify" rounded text severity="secondary" aria-label="Choose Data" onClick={() => onSidebarButtonClick(true)} />
+            <Button icon="pi pi-align-justify" rounded text severity="secondary" aria-label="Choose Data" onClick={() => onSidebarButtonClick(true)} tooltip='Choose Data' />
             <img alt="logo" src="https://primefaces.org/cdn/primereact/images/logo.png" height="40" className="mr-2"></img>
             PRIME REACT
         </div>
