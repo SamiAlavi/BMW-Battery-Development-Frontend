@@ -1,4 +1,5 @@
 import { Sidebar } from 'primereact/sidebar';
+import './SideBar.css'
 
 interface Props {
     visible: boolean;
@@ -7,8 +8,8 @@ interface Props {
 
 const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     return (
-        <div className="card flex justify-content-center">
-            <Sidebar visible={visible} onHide={() => onSidebarButtonClick(false)} className="w-full md:w-20rem lg:w-30rem">
+        <div className="sidebar-container">
+            <Sidebar visible={visible} onHide={() => onSidebarButtonClick(false)} className="glass-sidebar w-full md:w-20rem lg:w-30rem ">
                 <h2>Sidebar</h2>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 

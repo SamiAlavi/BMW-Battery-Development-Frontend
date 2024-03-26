@@ -1,0 +1,28 @@
+.sidebar-container {
+    position: relative;
+    width: 300px; /* Set the width of the sidebar */
+    height: 100vh; /* Set the height of the sidebar */
+  }
+  
+  .glass-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.15); /* Set the background color with transparency for the glass effect */
+    backdrop-filter: blur(10px); /* Apply a blur filter to create the glass effect */
+    border-right: 1px solid rgba(255, 255, 255, 0.15); /* Add a border for better visibility */
+    overflow-y: auto; /* Enable vertical scrolling if the content overflows */
+  }
+  
+  .glass-sidebar .p-sidebar-header {
+    background-color: transparent; /* Make the header transparent */
+  }
+  
+  .glass-sidebar .p-sidebar-footer {
+    background-color: transparent; /* Make the footer transparent */
+  }
+  
+  .glass-sidebar .p-sidebar-content {
+    padding-top: 20px; /* Add padding to the content area */
+  }
+  
