@@ -1,7 +1,8 @@
 import { Sidebar } from 'primereact/sidebar';
 import './SideBar.css'
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axiosInstance from './axiosInstance'
 
 interface Props {
     visible: boolean;
@@ -16,7 +17,20 @@ interface CSV_File {
 
 const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     const [selectedFile, setSelectedFile] = useState<CSV_File | null>(null);
-    const csvFiles: CSV_File[] = []
+    const [csvFiles, setCsvFiles] = useState<CSV_File[]>([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axiosInstance.get('csv_data');
+          setCsvFiles(response.data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+  
+      fetchData();
+    }, []);
 
     const customHeader = (
         <div className="flex align-items-center">
