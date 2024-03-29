@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import { IVisualizationData } from './interfaces';
 import { Config, Data, Layout } from 'plotly.js';
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
 interface Props {
     visualizationData: IVisualizationData;
@@ -13,6 +14,8 @@ function generateArray(n: number) {
 
 const ChartArea: React.FC<Props> = ({ visualizationData }) => {
     const [data, setData] = useState<Data[]>([]);
+    const [selectedPlotType, setSelectedPlotType] = useState<string | null>(null);
+    const [plotTypes, setPlotTypes] = useState<string[]>([]);
     const [layout, setLayout] = useState<Partial<Layout>>({width: 1000, height: 500});
     const [config, setConfig] = useState<Partial<Config>>({
         scrollZoom: true,
@@ -21,6 +24,9 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
         plotlyServerURL: "https://chart-studio.plotly.com",
         responsive: true,
     });
+
+    const plotTypes2d: string[] = []
+    const plotTypes3d: string[]  = []
     
     useEffect(() => {
         if (Object.keys(visualizationData).length === 0) {
@@ -46,6 +52,8 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             _layout[`${label}axis`] = {title: label}
         }
 
+        setPlotTypes(graphAxis.length === 3 ? plotTypes3d : plotTypes2d)
+
         const _data: Data[] = [
             {
                 ...axis,
@@ -57,15 +65,24 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
         setLayout(_layout)
         setData(_data)
     }, [visualizationData]);
+
+    const onDropdownChange = (e: DropdownChangeEvent) => {
+        setSelectedPlotType(e.value)
+    }
   
     return (
         <div className="w-screen h-screen pt-7">
             <div className="w-full h-full">
-            <Plot
-                data={data}
-                layout={layout}
-                config={config}
-            />
+                <div>                    
+                    <Dropdown value={selectedPlotType} onChange={onDropdownChange} options={plotTypes} 
+                        placeholder="Select Plot Type" className="w-5 m-3" />
+                </div>
+
+                <Plot
+                    data={data}
+                    layout={layout}
+                    config={config}
+                />
             </div>
         </div>
     );
