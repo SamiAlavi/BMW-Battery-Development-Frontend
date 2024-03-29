@@ -16,12 +16,17 @@ interface CSV_File {
     timestamp: string;
 }
 
+type ColAxisMap = {
+    [key: string]: string | null;
+};
+
 const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     const [selectedFile, setSelectedFile] = useState<CSV_File | null>(null);
     const [csvFiles, setCsvFiles] = useState<CSV_File[]>([]);
     const [type, setType] = useState<string>("capacity");
     const [columnsCapacity, setColumnsCapacity] = useState<string[]>([]);
     const [columnsCycle, setColumnsCycle] = useState<string[]>([]);
+    const [colsAxisMapping, setColsAxisMapping] = useState<ColAxisMap>({});
 
     const radioButtons = [
         {
@@ -33,6 +38,8 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
             value: "cycle",
         }
     ]
+
+    const axis = ["X", "Y", "Z"]
 
     const updateType = (type: string) => {
         setSelectedFile(null);
@@ -52,6 +59,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
             try {
                 const response = await axiosInstance.get('columns/capacity');
                 setColumnsCapacity(response.data);
+                resetColsAxisMapping(response.data)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -60,6 +68,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
             try {
                 const response = await axiosInstance.get('columns/cycle');
                 setColumnsCycle(response.data);
+                resetColsAxisMapping(response.data)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -76,9 +85,25 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
         </div>
     );
 
+    const resetColsAxisMapping = (cols: string[]) => {
+        setColsAxisMapping({})
+        cols.forEach((col) => {
+            colsAxisMapping[col] = "X";
+        })
+
+    }
+
     const onFileDropdownChange = (e: DropdownChangeEvent) => {
         setSelectedFile(e.value)
     }
+
+    const onAxisChange = (axis: string, col: string) => {
+        setColsAxisMapping({
+            ...colsAxisMapping,
+            [col]: axis,
+        })
+    }
+
 
     return (
         <div className="sidebar-container">
@@ -99,7 +124,27 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
                 </div>
                     
                 <Dropdown value={selectedFile} onChange={onFileDropdownChange} options={csvFiles.filter((val) => val.type===type)} optionLabel="filename" optionValue='id' 
-                    placeholder="Select a File" className="w-full" />
+                    placeholder="Select a File" className="w-full mb-3" />
+
+                <table border={1} className='w-full'>
+                    <tbody>
+                        {
+                            type === "capacity" ? (
+                                columnsCapacity.map((col) => {
+                                    return <tr className='vertical-align-baseline'>
+                                        <td className='w-5'>
+                                            {col}
+                                        </td>
+                                        <td>
+                                            <Dropdown value={colsAxisMapping[col]} onChange={(e) => onAxisChange(e.value, col)} options={axis} 
+                                                placeholder="Select Axis" className="w-full mb-3" />
+                                        </td>
+                                    </tr>
+                                })
+                            ) : <></>
+                        }
+                    </tbody>
+                </table>
             </Sidebar>
         </div>
     )
