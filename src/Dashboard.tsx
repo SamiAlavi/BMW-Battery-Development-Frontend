@@ -2,6 +2,7 @@ import NavBar from './NavBar'
 import SideBar from './SideBar';
 import BottomNav from './BottomNav';
 import { useState } from 'react';
+import ChartArea from './ChartArea';
 
 export default function Dashboard() {
   const [isSidebarVisible, setSidebarVisible] = useState<boolean>(true);
@@ -12,6 +13,7 @@ export default function Dashboard() {
   
   return (
     <>
+      <ChartArea/>
       <NavBar onSidebarButtonClick={onSidebarButtonClick} />
       <SideBar visible={isSidebarVisible} onSidebarButtonClick={onSidebarButtonClick}/>
       <BottomNav/>

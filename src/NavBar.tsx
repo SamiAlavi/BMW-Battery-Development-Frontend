@@ -25,7 +25,7 @@ const NavBar: React.FC<Props> = ({ onSidebarButtonClick }) =>  {
     );
 
     return (
-        <div className="card">
+        <div className="card absolute top-0 left-0 w-full">
             <Menubar model={items} start={start} end={end} />
         </div>
     );
