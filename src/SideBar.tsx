@@ -3,6 +3,7 @@ import './SideBar.css'
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { useEffect, useState } from 'react';
 import { RadioButton } from 'primereact/radiobutton';
+import { Button } from 'primereact/button';
 import axiosInstance from './axiosInstance'
 
 interface Props {
@@ -110,6 +111,45 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
         })
     }
 
+    const validate = () => {
+        if (!selectedFile) {
+            return {
+                error: true,
+                message: "No File Chosen"
+            }
+        }
+
+        const values = Object.values(colsAxisMapping);
+        const uniqueValues = [...new Set(values)]
+
+        if (!uniqueValues.some((val) => val)) {
+            return {
+                error: true,
+                message: "Choose atleast 1 axis"
+            }
+        }
+
+        if (uniqueValues.length !== values.length) {
+            return {
+                error: true,
+                message: "Multiple columns cannot be mapped to same axis"
+            }
+        }
+        return  {
+            error: false,
+            message: ""
+        }
+        
+    }
+
+    const visualize = () => {
+        const {error, message} = validate()
+        if (error) {
+            console.log(message)
+            return
+        }
+    }
+
 
     return (
         <div className="sidebar-container">
@@ -149,6 +189,9 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
                         }
                     </tbody>
                 </table>
+                <div className='w-full text-center'>                    
+                    <Button icon="pi pi-check" aria-label="Visualize" onClick={visualize} label='Visualize' />
+                </div>
             </Sidebar>
         </div>
     )
