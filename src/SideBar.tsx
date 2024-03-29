@@ -128,7 +128,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizat
             }
         }
 
-        const values = Object.values(colsAxisMapping);
+        const values = Object.values(colsAxisMapping).filter((val) => val);
         const uniqueValues = [...new Set(values)]
 
         if (!uniqueValues.some((val) => val)) {
