@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import { IVisualizationData } from './interfaces';
-import { Data, Layout } from 'plotly.js';
+import { Config, Data, Layout } from 'plotly.js';
 
 interface Props {
     visualizationData: IVisualizationData;
@@ -14,7 +14,14 @@ function generateArray(n: number) {
 const ChartArea: React.FC<Props> = ({ visualizationData }) => {
     const [data, setData] = useState<Data[]>([]);
     const [layout, setLayout] = useState<Partial<Layout>>({width: 1000, height: 500});
-
+    const [config, setConfig] = useState<Partial<Config>>({
+        scrollZoom: true,
+        editable: true,
+        showLink: true,
+        plotlyServerURL: "https://chart-studio.plotly.com",
+        responsive: true,
+    });
+    
     useEffect(() => {
         if (Object.keys(visualizationData).length === 0) {
             return
@@ -57,6 +64,7 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             <Plot
                 data={data}
                 layout={layout}
+                config={config}
             />
             </div>
         </div>
