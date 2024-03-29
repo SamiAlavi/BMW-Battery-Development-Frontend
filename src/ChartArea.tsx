@@ -23,17 +23,34 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
         let axis = {}
         if (cols.length === 1) {
             const values = data.map((val) => Object.values(val)).flat();
-            if (colsAxisMapping[cols[0]]==="X") {
+            const indexes = generateArray(values.length)
+            const label = colsAxisMapping[cols[0]]
+            if (label==="X") {
                 axis = {
                     x: values,
-                    y: generateArray(values.length)
+                    y: indexes,
+                    z: indexes
+                }
+            }
+            else if (label==="Y") {
+                axis = {
+                    x: indexes,
+                    y: values,
+                    z: indexes
+                }
+            }
+           else  if (label==="Z") {
+                axis = {
+                    x: indexes,
+                    y: indexes,
+                    z: values
                 }
             }
         }
         const _data: Data[] = [
             {
                 ...axis,
-                type: 'scatter',
+                type: 'scatter3d',
                 mode: 'lines+markers',
                 marker: {color: 'red'},
             },
