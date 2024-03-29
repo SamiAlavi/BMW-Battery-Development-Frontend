@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import { IVisualizationData } from './interfaces';
-import { Config, Data, Layout } from 'plotly.js';
+import { Config, Layout, PlotData } from 'plotly.js';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
 interface Props {
@@ -13,9 +13,12 @@ function generateArray(n: number) {
 }
 
 const ChartArea: React.FC<Props> = ({ visualizationData }) => {
-    const [data, setData] = useState<Data[]>([]);
-    const [selectedPlotType, setSelectedPlotType] = useState<string | null>(null);
-    const [plotTypes, setPlotTypes] = useState<string[]>([]);
+    const plotModes2d: string[] = ["lines", "markers", "lines+markers", "gauge", "number"]
+    const plotModes3d: string[]  = []
+
+    const [data, setData] = useState<Partial<PlotData>>({});
+    const [selectedPlotMode, setselectedPlotMode] = useState<string>(plotModes2d[0]);
+    const [plotTypes, setPlotTypes] = useState<string[]>(plotModes2d);
     const [layout, setLayout] = useState<Partial<Layout>>({width: 1000, height: 500});
     const [config, setConfig] = useState<Partial<Config>>({
         scrollZoom: true,
@@ -24,9 +27,6 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
         plotlyServerURL: "https://chart-studio.plotly.com",
         responsive: true,
     });
-
-    const plotTypes2d: string[] = []
-    const plotTypes3d: string[]  = []
     
     useEffect(() => {
         if (Object.keys(visualizationData).length === 0) {
@@ -52,34 +52,36 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             _layout[`${label}axis`] = {title: label}
         }
 
-        setPlotTypes(graphAxis.length === 3 ? plotTypes3d : plotTypes2d)
+        setPlotTypes(graphAxis.length === 3 ? plotModes3d : plotModes2d)
 
-        const _data: Data[] = [
-            {
-                ...axis,
-                type: 'scatter',
-                mode: 'lines+markers',
-                marker: {color: 'red'},
-            },
-        ]
+        const _data: Partial<PlotData> = {
+            ...axis,
+            type: "scattergl",
+            mode: selectedPlotMode,
+            marker: {color: 'red'},
+        }
         setLayout(_layout)
         setData(_data)
     }, [visualizationData]);
 
     const onDropdownChange = (e: DropdownChangeEvent) => {
-        setSelectedPlotType(e.value)
+        setselectedPlotMode(e.value)
+        setData({
+            ...data,
+            mode: e.value,
+        })
     }
   
     return (
         <div className="w-screen h-screen pt-7">
             <div className="w-full h-full">
                 <div>                    
-                    <Dropdown value={selectedPlotType} onChange={onDropdownChange} options={plotTypes} 
-                        placeholder="Select Plot Type" className="w-5 m-3" />
+                    <Dropdown value={selectedPlotMode} onChange={onDropdownChange} options={plotTypes} 
+                        placeholder="Select Plot Mode" className="w-5 m-3" />
                 </div>
 
                 <Plot
-                    data={data}
+                    data={[data]}
                     layout={layout}
                     config={config}
                 />
