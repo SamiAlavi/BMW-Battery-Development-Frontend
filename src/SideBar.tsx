@@ -23,7 +23,7 @@ type ColAxisMap = {
 };
 
 const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
-    const [selectedFile, setSelectedFile] = useState<CSV_File | null>(null);
+    const [selectedFile, setSelectedFile] = useState<number | null>(null);
     const [csvFiles, setCsvFiles] = useState<CSV_File[]>([]);
     const [type, setType] = useState<string>("capacity");
     const [columnsCapacity, setColumnsCapacity] = useState<string[]>([]);
@@ -149,12 +149,24 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
         
     }
 
-    const visualize = () => {
+    const visualize = async () => {
         const {error, message} = validate()
         if (error) {
             showToastError(message)
             return
         }
+        const cols: string[] = []
+        Object.entries(colsAxisMapping).forEach(([col, value]) => {
+            if (value) {
+                cols.push(col)
+            }
+        })
+        const body = {
+            file_id: selectedFile,
+            type: type,
+            cols: cols,
+        }
+        const response = await axiosInstance.post('visualize', body);
     }
 
 
