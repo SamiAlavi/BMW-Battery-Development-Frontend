@@ -6,6 +6,7 @@ import ChartArea from './ChartArea';
 
 export default function Dashboard() {
   const [isSidebarVisible, setSidebarVisible] = useState<boolean>(true);
+  const [visualizationData, setVisualizationData] = useState<any>({});
 
   const onSidebarButtonClick = (value: boolean) => {
     setSidebarVisible(value);
@@ -13,9 +14,9 @@ export default function Dashboard() {
   
   return (
     <>
-      <ChartArea/>
+      <ChartArea visualizationData={visualizationData}/>
       <NavBar onSidebarButtonClick={onSidebarButtonClick} />
-      <SideBar visible={isSidebarVisible} onSidebarButtonClick={onSidebarButtonClick}/>
+      <SideBar visible={isSidebarVisible} onSidebarButtonClick={onSidebarButtonClick} setVisualizationData={setVisualizationData}/>
       <BottomNav/>
     </>
   );

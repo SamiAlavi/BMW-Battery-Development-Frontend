@@ -10,7 +10,9 @@ import axiosInstance from './axiosInstance'
 interface Props {
     visible: boolean;
     onSidebarButtonClick: (value: boolean) => void;
+    setVisualizationData: (value: object) => void;
 }
+
 interface CSV_File {
     id: number;
     filename: string;
@@ -22,7 +24,7 @@ type ColAxisMap = {
     [key: string]: string | undefined;
 };
 
-const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
+const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizationData }) => {
     const [selectedFile, setSelectedFile] = useState<number | null>(null);
     const [csvFiles, setCsvFiles] = useState<CSV_File[]>([]);
     const [type, setType] = useState<string>("capacity");
@@ -167,6 +169,12 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
             cols: cols,
         }
         const response = await axiosInstance.post('visualize', body);
+
+        const visualizationData = {
+            ...body,
+            data: response.data,
+        }
+        setVisualizationData(visualizationData)
     }
 
 
