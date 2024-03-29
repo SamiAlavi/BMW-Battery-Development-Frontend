@@ -19,12 +19,12 @@ interface CSV_File {
 const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     const [selectedFile, setSelectedFile] = useState<CSV_File | null>(null);
     const [csvFiles, setCsvFiles] = useState<CSV_File[]>([]);
-    const [type, setType] = useState<string>('');
+    const [type, setType] = useState<string>("capacity");
 
     const radioButtons = [
         {
-            label: "Category",
-            value: "category",
+            label: "Capacity",
+            value: "capacity",
         },
         {
             label: "Cycle",
@@ -33,6 +33,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     ]
 
     const updateType = (type: string) => {
+        setSelectedFile(null);
         setType(type);
     }
 
@@ -77,7 +78,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
                     }
                 </div>
                     
-                <Dropdown value={selectedFile} onChange={onFileDropdownChange} options={csvFiles} optionLabel="filename" optionValue='id' 
+                <Dropdown value={selectedFile} onChange={onFileDropdownChange} options={csvFiles.filter((val) => val.type===type)} optionLabel="filename" optionValue='id' 
                     placeholder="Select a File" className="w-full" />
             </Sidebar>
         </div>
