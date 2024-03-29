@@ -1,9 +1,10 @@
 import { Sidebar } from 'primereact/sidebar';
 import './SideBar.css'
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { RadioButton } from 'primereact/radiobutton';
 import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
 import axiosInstance from './axiosInstance'
 
 interface Props {
@@ -29,6 +30,8 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     const [columnsCycle, setColumnsCycle] = useState<string[]>([]);
     const [colsAxisMapping, setColsAxisMapping] = useState<ColAxisMap>({});
     const [selectedTypeColumns, setSelectedTypeColumns] = useState<string[]>([]);
+    
+    const toast = useRef<Toast>(null);
 
     const radioButtons = [
         {
@@ -111,6 +114,10 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
         })
     }
 
+    const showToastError = (message: string) => {
+        toast?.current?.show({severity:'error', summary: 'Error', detail:message, life: 10_000});
+    }
+
     const validate = () => {
         if (!selectedFile) {
             return {
@@ -145,13 +152,14 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     const visualize = () => {
         const {error, message} = validate()
         if (error) {
-            console.log(message)
+            showToastError(message)
             return
         }
     }
 
 
-    return (
+    return (<>        
+        <Toast ref={toast} position="bottom-center" />
         <div className="sidebar-container">
             <Sidebar
                 visible={visible}
@@ -194,7 +202,8 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
                 </div>
             </Sidebar>
         </div>
-    )
+        
+    </>)
 }
   
 export default SideBar;
