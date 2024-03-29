@@ -2,6 +2,7 @@ import { Sidebar } from 'primereact/sidebar';
 import './SideBar.css'
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { useEffect, useState } from 'react';
+import { RadioButton } from 'primereact/radiobutton';
 import axiosInstance from './axiosInstance'
 
 interface Props {
@@ -18,6 +19,22 @@ interface CSV_File {
 const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     const [selectedFile, setSelectedFile] = useState<CSV_File | null>(null);
     const [csvFiles, setCsvFiles] = useState<CSV_File[]>([]);
+    const [type, setType] = useState<string>('');
+
+    const radioButtons = [
+        {
+            label: "Category",
+            value: "category",
+        },
+        {
+            label: "Cycle",
+            value: "cycle",
+        }
+    ]
+
+    const updateType = (type: string) => {
+        setType(type);
+    }
 
     useEffect(() => {
       const fetchData = async () => {
@@ -49,6 +66,16 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
                 onHide={() => onSidebarButtonClick(false)}
                 className="glass-sidebar w-full md:w-20rem lg:w-30rem"
                 header={customHeader}>
+                <div className="flex flex-wrap gap-3 mb-3">
+                    {
+                        radioButtons.map((btn) => {
+                            return <>
+                                <RadioButton inputId={btn.value} name={btn.label} value={btn.value} onChange={(e) => updateType(e.value)} checked={type === btn.value} />
+                                <label htmlFor={btn.value} className="ml-2">{btn.label}</label>
+                            </>
+                        })
+                    }
+                </div>
                     
                 <Dropdown value={selectedFile} onChange={onFileDropdownChange} options={csvFiles} optionLabel="filename" optionValue='id' 
                     placeholder="Select a File" className="w-full" />
