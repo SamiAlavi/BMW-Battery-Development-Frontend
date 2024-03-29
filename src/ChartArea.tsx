@@ -21,21 +21,25 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
         }
         const {cols, data, type, colsAxisMapping} = visualizationData
         let axis: any = {}
-        if (cols.length === 1) {
-            const values = data.map((val) => Object.values(val)).flat();
-            const indexes = generateArray(values.length)
-            const label = colsAxisMapping[cols[0]]?.toLowerCase() ?? ""
-            axis = {
-                x: indexes,
-                y: indexes,
-                z: indexes
-            }
+        let valuesLength = 0
+        Object.entries(data).forEach(([col, values]) => {
+            const label = (colsAxisMapping[col] ?? "").toLowerCase()
             axis[label] = values
+            valuesLength = values.length
+        })
+        const graphAxis = Object.keys(axis)
+        if (graphAxis.length === 1) {
+            const indexLabel = ["x", "y", "z"].filter((val) => !graphAxis.includes(val))[0]
+            const indexes = generateArray(valuesLength)
+            axis[indexLabel] = indexes
         }
+        
+        console.log(axis)
+        
         const _data: Data[] = [
             {
                 ...axis,
-                type: 'scatter3d',
+                type: 'scatter',
                 mode: 'lines+markers',
                 marker: {color: 'red'},
             },
