@@ -20,32 +20,17 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             return
         }
         const {cols, data, type, colsAxisMapping} = visualizationData
-        let axis = {}
+        let axis: any = {}
         if (cols.length === 1) {
             const values = data.map((val) => Object.values(val)).flat();
             const indexes = generateArray(values.length)
-            const label = colsAxisMapping[cols[0]]
-            if (label==="X") {
-                axis = {
-                    x: values,
-                    y: indexes,
-                    z: indexes
-                }
+            const label = colsAxisMapping[cols[0]]?.toLowerCase() ?? ""
+            axis = {
+                x: indexes,
+                y: indexes,
+                z: indexes
             }
-            else if (label==="Y") {
-                axis = {
-                    x: indexes,
-                    y: values,
-                    z: indexes
-                }
-            }
-           else  if (label==="Z") {
-                axis = {
-                    x: indexes,
-                    y: indexes,
-                    z: values
-                }
-            }
+            axis[label] = values
         }
         const _data: Data[] = [
             {
