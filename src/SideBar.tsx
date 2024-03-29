@@ -17,7 +17,7 @@ interface CSV_File {
 }
 
 type ColAxisMap = {
-    [key: string]: string | null;
+    [key: string]: string | undefined;
 };
 
 const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
@@ -44,6 +44,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     const updateType = (type: string) => {
         setSelectedFile(null);
         setType(type);
+        resetColsAxisMapping(type==="capacity" ? columnsCapacity : columnsCycle)
     }
 
     useEffect(() => {
@@ -68,7 +69,6 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
             try {
                 const response = await axiosInstance.get('columns/cycle');
                 setColumnsCycle(response.data);
-                resetColsAxisMapping(response.data)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -86,10 +86,11 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     );
 
     const resetColsAxisMapping = (cols: string[]) => {
-        setColsAxisMapping({})
+        const temp: ColAxisMap = {}
         cols.forEach((col) => {
-            colsAxisMapping[col] = "X";
+            temp[col] = undefined;
         })
+        setColsAxisMapping(temp)
 
     }
 
@@ -137,7 +138,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
                                         </td>
                                         <td>
                                             <Dropdown value={colsAxisMapping[col]} onChange={(e) => onAxisChange(e.value, col)} options={axis} 
-                                                placeholder="Select Axis" className="w-full mb-3" />
+                                                placeholder="Select Axis" className="w-full mb-3" showClear={true}/>
                                         </td>
                                     </tr>
                                 })
