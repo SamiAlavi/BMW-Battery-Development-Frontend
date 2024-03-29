@@ -38,16 +38,16 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     }
 
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await axiosInstance.get('csv_data');
-          setCsvFiles(response.data);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
+        const fetchData = async () => {
+            try {
+            const response = await axiosInstance.get('csv_data');
+            setCsvFiles(response.data);
+            } catch (error) {
+            console.error('Error fetching data:', error);
+            }
+        };
   
-      fetchData();
+        fetchData();
     }, []);
 
     const customHeader = (
