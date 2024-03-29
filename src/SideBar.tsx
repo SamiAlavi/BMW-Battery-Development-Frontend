@@ -20,6 +20,8 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     const [selectedFile, setSelectedFile] = useState<CSV_File | null>(null);
     const [csvFiles, setCsvFiles] = useState<CSV_File[]>([]);
     const [type, setType] = useState<string>("capacity");
+    const [columnsCapacity, setColumnsCapacity] = useState<string[]>([]);
+    const [columnsCycle, setColumnsCycle] = useState<string[]>([]);
 
     const radioButtons = [
         {
@@ -40,14 +42,32 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-            const response = await axiosInstance.get('csv_data');
-            setCsvFiles(response.data);
+                const response = await axiosInstance.get('csv_data');
+                setCsvFiles(response.data);
             } catch (error) {
-            console.error('Error fetching data:', error);
+                console.error('Error fetching data:', error);
+            }
+        };
+        const fetchColumnsCapacity = async () => {
+            try {
+                const response = await axiosInstance.get('columns/capacity');
+                setColumnsCapacity(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        const fetchColumnsCycle = async () => {
+            try {
+                const response = await axiosInstance.get('columns/cycle');
+                setColumnsCycle(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
         };
   
         fetchData();
+        fetchColumnsCapacity();
+        fetchColumnsCycle();
     }, []);
 
     const customHeader = (
