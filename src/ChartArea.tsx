@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import { IVisualizationData } from './interfaces';
-import { Data } from 'plotly.js';
+import { Data, Layout } from 'plotly.js';
 
 interface Props {
     visualizationData: IVisualizationData;
@@ -13,29 +13,32 @@ function generateArray(n: number) {
 
 const ChartArea: React.FC<Props> = ({ visualizationData }) => {
     const [data, setData] = useState<Data[]>([]);
-    const [title, setTitle] = useState<string>("");
+    const [layout, setLayout] = useState<Partial<Layout>>({width: 1000, height: 500});
 
     useEffect(() => {
         if (Object.keys(visualizationData).length === 0) {
             return
         }
-        const {cols, data, type, colsAxisMapping} = visualizationData
-        let axis: any = {}
+        const {data, type, colsAxisMapping} = visualizationData
+        const axis: any = {}
+        const _layout: any = {width: 1000, height: 500, title: type}
         let valuesLength = 0
+
         Object.entries(data).forEach(([col, values]) => {
             const label = (colsAxisMapping[col] ?? "").toLowerCase()
             axis[label] = values
+            _layout[`${label}axis`] = {title: col}
             valuesLength = values.length
         })
+        
         const graphAxis = Object.keys(axis)
         if (graphAxis.length === 1) {
-            const indexLabel = ["x", "y", "z"].filter((val) => !graphAxis.includes(val))[0]
+            const label = ["x", "y", "z"].filter((val) => !graphAxis.includes(val))[0]
             const indexes = generateArray(valuesLength)
-            axis[indexLabel] = indexes
+            axis[label] = indexes
+            _layout[`${label}axis`] = {title: label}
         }
-        
-        console.log(axis)
-        
+
         const _data: Data[] = [
             {
                 ...axis,
@@ -44,9 +47,7 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
                 marker: {color: 'red'},
             },
         ]
-        console.log(visualizationData)
-        console.log(_data)
-        setTitle(type)
+        setLayout(_layout)
         setData(_data)
     }, [visualizationData]);
   
@@ -55,7 +56,7 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             <div className="w-full h-full">
             <Plot
                 data={data}
-                layout={{width: 1000, height: 500, title: title}}
+                layout={layout}
             />
             </div>
         </div>
