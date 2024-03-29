@@ -27,6 +27,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     const [columnsCapacity, setColumnsCapacity] = useState<string[]>([]);
     const [columnsCycle, setColumnsCycle] = useState<string[]>([]);
     const [colsAxisMapping, setColsAxisMapping] = useState<ColAxisMap>({});
+    const [selectedTypeColumns, setSelectedTypeColumns] = useState<string[]>([]);
 
     const radioButtons = [
         {
@@ -44,7 +45,9 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
     const updateType = (type: string) => {
         setSelectedFile(null);
         setType(type);
-        resetColsAxisMapping(type==="capacity" ? columnsCapacity : columnsCycle)
+        const cols = type==="capacity" ? columnsCapacity : columnsCycle
+        setSelectedTypeColumns(cols)
+        resetColsAxisMapping(cols)
     }
 
     useEffect(() => {
@@ -59,8 +62,10 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
         const fetchColumnsCapacity = async () => {
             try {
                 const response = await axiosInstance.get('columns/capacity');
-                setColumnsCapacity(response.data);
-                resetColsAxisMapping(response.data)
+                const cols = response.data
+                setColumnsCapacity(cols);
+                setSelectedTypeColumns(cols)
+                resetColsAxisMapping(cols)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -68,7 +73,8 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
         const fetchColumnsCycle = async () => {
             try {
                 const response = await axiosInstance.get('columns/cycle');
-                setColumnsCycle(response.data);
+                const cols = response.data
+                setColumnsCycle(cols);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -91,7 +97,6 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
             temp[col] = undefined;
         })
         setColsAxisMapping(temp)
-
     }
 
     const onFileDropdownChange = (e: DropdownChangeEvent) => {
@@ -127,22 +132,20 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick }) => {
                 <Dropdown value={selectedFile} onChange={onFileDropdownChange} options={csvFiles.filter((val) => val.type===type)} optionLabel="filename" optionValue='id' 
                     placeholder="Select a File" className="w-full mb-3" />
 
-                <table border={1} className='w-full'>
+                <table border={0} className='w-full'>
                     <tbody>
                         {
-                            type === "capacity" ? (
-                                columnsCapacity.map((col) => {
-                                    return <tr className='vertical-align-baseline'>
-                                        <td className='w-5'>
-                                            {col}
-                                        </td>
-                                        <td>
-                                            <Dropdown value={colsAxisMapping[col]} onChange={(e) => onAxisChange(e.value, col)} options={axis} 
-                                                placeholder="Select Axis" className="w-full mb-3" showClear={true}/>
-                                        </td>
-                                    </tr>
-                                })
-                            ) : <></>
+                            selectedTypeColumns.map((col) => {
+                                return <tr className='vertical-align-baseline'>
+                                    <td className='w-5'>
+                                        {col}
+                                    </td>
+                                    <td>
+                                        <Dropdown value={colsAxisMapping[col]} onChange={(e) => onAxisChange(e.value, col)} options={axis} 
+                                            placeholder="Select Axis" className="w-full mb-3" showClear={true}/>
+                                    </td>
+                                </tr>
+                            })
                         }
                     </tbody>
                 </table>
