@@ -6,6 +6,7 @@ import { RadioButton } from 'primereact/radiobutton';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import axiosInstance from './axiosInstance'
+import { IColAxisMap } from './interfaces';
 
 interface Props {
     visible: boolean;
@@ -20,17 +21,13 @@ interface CSV_File {
     timestamp: string;
 }
 
-type ColAxisMap = {
-    [key: string]: string | undefined;
-};
-
 const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizationData }) => {
     const [selectedFile, setSelectedFile] = useState<number | null>(null);
     const [csvFiles, setCsvFiles] = useState<CSV_File[]>([]);
     const [type, setType] = useState<string>("capacity");
     const [columnsCapacity, setColumnsCapacity] = useState<string[]>([]);
     const [columnsCycle, setColumnsCycle] = useState<string[]>([]);
-    const [colsAxisMapping, setColsAxisMapping] = useState<ColAxisMap>({});
+    const [colsAxisMapping, setColsAxisMapping] = useState<IColAxisMap>({});
     const [selectedTypeColumns, setSelectedTypeColumns] = useState<string[]>([]);
     
     const toast = useRef<Toast>(null);
@@ -98,7 +95,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizat
     );
 
     const resetColsAxisMapping = (cols: string[]) => {
-        const temp: ColAxisMap = {}
+        const temp: IColAxisMap = {}
         cols.forEach((col) => {
             temp[col] = undefined;
         })
@@ -172,6 +169,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizat
 
         const visualizationData = {
             ...body,
+            colsAxisMapping: colsAxisMapping,
             data: response.data,
         }
         setVisualizationData(visualizationData)
