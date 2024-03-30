@@ -27,6 +27,9 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
         showLink: true,
         plotlyServerURL: "https://chart-studio.plotly.com",
         responsive: true,
+        showTips: true,
+        displayModeBar: true,
+        showEditInChartStudio: true,
     });
     
     useEffect(() => {
@@ -57,7 +60,12 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             ...axis,
             type: graphAxis.length === 3 ? selectedPlotType : "scattergl",
             mode: selectedPlotMode,
-            marker: {color: 'red'},
+            marker: {
+                size: 12,
+                line: {
+                color: 'rgba(217, 217, 217, 0.14)',
+                width: 0.5},
+                opacity: 0.8},
         }
 
         setIs3d(graphAxis.length === 3)
@@ -84,14 +92,14 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
     return (
         <div className="w-screen h-screen pt-7">
             <div className="w-full h-full">
-                <div>
-                    <Dropdown value={selectedPlotMode} onChange={onModeChange} options={_plotModes} 
+                <div className='m-3'>
+                    Select Plot Mode: <Dropdown value={selectedPlotMode} onChange={onModeChange} options={_plotModes} 
                         placeholder="Select Plot Mode" className="w-5 m-3" />
                 </div>
                 {
                     is3d ? (
                         
-                    <div>
+                    <div className='m-3'>
                         <Dropdown value={selectedPlotType} onChange={onTypeChange} options={_plotTypes3d} 
                             placeholder="Select Plot Types" className="w-5 m-3" />
                     </div>
