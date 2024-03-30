@@ -8,6 +8,8 @@ interface Props {
     visualizationData: IVisualizationData;
 }
 
+type TDownloadFormat = "png" | "svg" | "jpeg" | "webp"
+
 function generateArray(n: number) {
     return Array.from({ length: n }, (_, index) => index);
 }
@@ -18,10 +20,12 @@ const MAX_HEIGHT = window.innerHeight/1.25;
 const ChartArea: React.FC<Props> = ({ visualizationData }) => {
     const _plotModes: string[] = ["markers", "lines", "lines+markers"]
     const _plotTypes3d: string[]  = ["scatter3d"]
+    const _downloadFormats: TDownloadFormat[]  = ["png", "svg", "jpeg", "webp"]
 
     const [data, setData] = useState<Partial<PlotData>>({});
     const [selectedPlotMode, setselectedPlotMode] = useState<string>(_plotModes[0]);
     const [selectedPlotType, setselectedPlotType] = useState<string>(_plotTypes3d[0]);
+    const [selectedDownloadFormat, setselectedDownloadFormat] = useState<TDownloadFormat>("svg");
     const [layout, setLayout] = useState<Partial<Layout>>({width: MAX_WIDTH, height: MAX_HEIGHT});
     const [is3d, setIs3d] = useState<boolean>(false);
     const [config, setConfig] = useState<Partial<Config>>({
@@ -33,6 +37,9 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
         showTips: true,
         displayModeBar: true,
         showEditInChartStudio: true,
+        toImageButtonOptions: {
+            format: selectedDownloadFormat
+        }
     });
     
     useEffect(() => {
@@ -69,7 +76,8 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
                 line: {
                 color: 'rgba(217, 217, 217, 0.14)',
                 width: 0.5},
-                opacity: 0.8},
+                opacity: 0.8
+            },
         }
 
         _layoutLabels = {
@@ -100,21 +108,32 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             type: is3d ? e.value : "scattergl",
         })
     }
+
+    const onFormatChange = (e: DropdownChangeEvent) => {
+        setselectedDownloadFormat(e.value)
+        const temp = config
+        if (temp.toImageButtonOptions) {
+            temp.toImageButtonOptions.format = e.value
+            setConfig(temp)
+        }
+    }
   
     return (
         <div className="w-screen h-screen pt-7">
             <div className="w-full h-full">
                 <div className='m-3'>
                     Select Plot Mode: <Dropdown value={selectedPlotMode} onChange={onModeChange} options={_plotModes} 
-                        placeholder="Select Plot Mode" className="w-4 m-3" />
+                        placeholder="Select Plot Mode" className="w-2 m-3" />
                     {
                         is3d ? (                        
                             <>
                                 Select Plot Types: <Dropdown value={selectedPlotType} onChange={onTypeChange} options={_plotTypes3d} 
-                                    placeholder="Select Plot Types" className="w-4 m-3" />
+                                    placeholder="Select Plot Types" className="w-2 m-3" />
                             </>
                             ) : <></>
                     }
+                    Download Format: <Dropdown value={selectedDownloadFormat} onChange={onFormatChange} options={_downloadFormats} 
+                        placeholder="Select Download Format" className="w-2 m-3" />
                 </div>
 
                 <Plot
