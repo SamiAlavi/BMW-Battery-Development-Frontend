@@ -13,10 +13,10 @@ function generateArray(n: number) {
 }
 
 const MAX_WIDTH = window.innerWidth;
-const MAX_HEIGHT = window.innerHeight/1.5;
+const MAX_HEIGHT = window.innerHeight/1.25;
 
 const ChartArea: React.FC<Props> = ({ visualizationData }) => {
-    const _plotModes: string[] = ["lines", "markers", "lines+markers"]
+    const _plotModes: string[] = ["markers", "lines", "lines+markers"]
     const _plotTypes3d: string[]  = ["scatter3d"]
 
     const [data, setData] = useState<Partial<PlotData>>({});
@@ -106,17 +106,16 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             <div className="w-full h-full">
                 <div className='m-3'>
                     Select Plot Mode: <Dropdown value={selectedPlotMode} onChange={onModeChange} options={_plotModes} 
-                        placeholder="Select Plot Mode" className="w-5 m-3" />
+                        placeholder="Select Plot Mode" className="w-4 m-3" />
+                    {
+                        is3d ? (                        
+                            <>
+                                Select Plot Types: <Dropdown value={selectedPlotType} onChange={onTypeChange} options={_plotTypes3d} 
+                                    placeholder="Select Plot Types" className="w-4 m-3" />
+                            </>
+                            ) : <></>
+                    }
                 </div>
-                {
-                    is3d ? (
-                        
-                    <div className='m-3'>
-                        Select Plot Types: <Dropdown value={selectedPlotType} onChange={onTypeChange} options={_plotTypes3d} 
-                            placeholder="Select Plot Types" className="w-5 m-3" />
-                    </div>
-                    ) : <></>
-                }
 
                 <Plot
                     data={[data]}
