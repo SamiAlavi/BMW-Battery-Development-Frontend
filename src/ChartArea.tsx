@@ -12,6 +12,9 @@ function generateArray(n: number) {
     return Array.from({ length: n }, (_, index) => index);
 }
 
+const MAX_WIDTH = window.innerWidth;
+const MAX_HEIGHT = window.innerHeight/1.5;
+
 const ChartArea: React.FC<Props> = ({ visualizationData }) => {
     const _plotModes: string[] = ["lines", "markers", "lines+markers"]
     const _plotTypes3d: string[]  = ["scatter3d"]
@@ -19,7 +22,7 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
     const [data, setData] = useState<Partial<PlotData>>({});
     const [selectedPlotMode, setselectedPlotMode] = useState<string>(_plotModes[0]);
     const [selectedPlotType, setselectedPlotType] = useState<string>(_plotTypes3d[0]);
-    const [layout, setLayout] = useState<Partial<Layout>>({width: 1000, height: 500});
+    const [layout, setLayout] = useState<Partial<Layout>>({width: MAX_WIDTH, height: MAX_HEIGHT});
     const [is3d, setIs3d] = useState<boolean>(false);
     const [config, setConfig] = useState<Partial<Config>>({
         scrollZoom: true,
@@ -38,13 +41,14 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
         }
         const {data, type, colsAxisMapping} = visualizationData
         const axis: any = {}
-        const _layout: any = {width: 1000, height: 500, title: type}
+        const _layout: Partial<Plotly.Layout> = { ...layout, title: type}
+        let _layoutLabels: any = {}
         let valuesLength = 0
 
         Object.entries(data).forEach(([col, values]) => {
             const label = (colsAxisMapping[col] ?? "").toLowerCase()
             axis[label] = values
-            _layout[`${label}axis`] = {title: col}
+            _layoutLabels[`${label}axis`] = {title: col}
             valuesLength = values.length
         })
         
@@ -53,7 +57,7 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             const label = ["x", "y", "z"].filter((val) => !graphAxis.includes(val))[0]
             const indexes = generateArray(valuesLength)
             axis[label] = indexes
-            _layout[`${label}axis`] = {title: label}
+            _layoutLabels[`${label}axis`] = {title: label}
         }
 
         const _data: Partial<PlotData> = {
@@ -68,9 +72,17 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
                 opacity: 0.8},
         }
 
+        _layoutLabels = {
+            ..._layoutLabels,
+            scene: _layoutLabels
+        }
+
         setIs3d(graphAxis.length === 3)
-        setLayout(_layout)
         setData(_data)
+        setLayout({
+            ..._layout,
+            ..._layoutLabels
+        })
     }, [visualizationData]);
 
     const onModeChange = (e: DropdownChangeEvent) => {
@@ -100,7 +112,7 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
                     is3d ? (
                         
                     <div className='m-3'>
-                        <Dropdown value={selectedPlotType} onChange={onTypeChange} options={_plotTypes3d} 
+                        Select Plot Types: <Dropdown value={selectedPlotType} onChange={onTypeChange} options={_plotTypes3d} 
                             placeholder="Select Plot Types" className="w-5 m-3" />
                     </div>
                     ) : <></>
