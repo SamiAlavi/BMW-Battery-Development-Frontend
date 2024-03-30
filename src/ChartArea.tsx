@@ -13,13 +13,14 @@ function generateArray(n: number) {
 }
 
 const ChartArea: React.FC<Props> = ({ visualizationData }) => {
-    const plotModes2d: string[] = ["lines", "markers", "lines+markers", "gauge", "number"]
-    const plotModes3d: string[]  = []
+    const _plotModes: string[] = ["lines", "markers", "lines+markers"]
+    const _plotTypes3d: string[]  = ["scatter3d"]
 
     const [data, setData] = useState<Partial<PlotData>>({});
-    const [selectedPlotMode, setselectedPlotMode] = useState<string>(plotModes2d[0]);
-    const [plotTypes, setPlotTypes] = useState<string[]>(plotModes2d);
+    const [selectedPlotMode, setselectedPlotMode] = useState<string>(_plotModes[0]);
+    const [selectedPlotType, setselectedPlotType] = useState<string>(_plotTypes3d[0]);
     const [layout, setLayout] = useState<Partial<Layout>>({width: 1000, height: 500});
+    const [is3d, setIs3d] = useState<boolean>(false);
     const [config, setConfig] = useState<Partial<Config>>({
         scrollZoom: true,
         editable: true,
@@ -52,33 +53,50 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             _layout[`${label}axis`] = {title: label}
         }
 
-        setPlotTypes(graphAxis.length === 3 ? plotModes3d : plotModes2d)
-
         const _data: Partial<PlotData> = {
             ...axis,
-            type: "scattergl",
+            type: graphAxis.length === 3 ? selectedPlotType : "scattergl",
             mode: selectedPlotMode,
             marker: {color: 'red'},
         }
+
+        setIs3d(graphAxis.length === 3)
         setLayout(_layout)
         setData(_data)
     }, [visualizationData]);
 
-    const onDropdownChange = (e: DropdownChangeEvent) => {
+    const onModeChange = (e: DropdownChangeEvent) => {
         setselectedPlotMode(e.value)
         setData({
             ...data,
             mode: e.value,
         })
     }
+
+    const onTypeChange = (e: DropdownChangeEvent) => {
+        setselectedPlotType(e.value)
+        setData({
+            ...data,
+            type: is3d ? e.value : "scattergl",
+        })
+    }
   
     return (
         <div className="w-screen h-screen pt-7">
             <div className="w-full h-full">
-                <div>                    
-                    <Dropdown value={selectedPlotMode} onChange={onDropdownChange} options={plotTypes} 
+                <div>
+                    <Dropdown value={selectedPlotMode} onChange={onModeChange} options={_plotModes} 
                         placeholder="Select Plot Mode" className="w-5 m-3" />
                 </div>
+                {
+                    is3d ? (
+                        
+                    <div>
+                        <Dropdown value={selectedPlotType} onChange={onTypeChange} options={_plotTypes3d} 
+                            placeholder="Select Plot Types" className="w-5 m-3" />
+                    </div>
+                    ) : <></>
+                }
 
                 <Plot
                     data={[data]}
