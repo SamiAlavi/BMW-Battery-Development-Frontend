@@ -26,7 +26,8 @@ export default function BottomNav() {
         <div className="dock">
             <Tooltip target=".p-dock-action" position="top" />
             <Dock
-                model={dockItems}/>
+                model={dockItems}
+                position="right"/>
             <Dialog
                 visible={displayFileUploader}
                 header={'Upload File'}
