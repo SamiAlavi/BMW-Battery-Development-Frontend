@@ -14,8 +14,12 @@ function generateArray(n: number) {
     return Array.from({ length: n }, (_, index) => index);
 }
 
-const MAX_WIDTH = window.innerWidth;
-const MAX_HEIGHT = window.innerHeight/1.25;
+function getPlotWidth() {
+    return window.innerWidth
+}
+function getPlotHeight() {
+    return window.innerHeight/1.25
+}
 
 const ChartArea: React.FC<Props> = ({ visualizationData }) => {
     const _plotModes: string[] = ["markers", "lines", "lines+markers"]
@@ -26,7 +30,7 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
     const [selectedPlotMode, setselectedPlotMode] = useState<string>(_plotModes[0]);
     const [selectedPlotType, setselectedPlotType] = useState<string>(_plotTypes3d[0]);
     const [selectedDownloadFormat, setselectedDownloadFormat] = useState<TDownloadFormat>("svg");
-    const [layout, setLayout] = useState<Partial<Layout>>({width: MAX_WIDTH, height: MAX_HEIGHT});
+    const [layout, setLayout] = useState<Partial<Layout>>({width: getPlotWidth(), height: getPlotHeight()});
     const [is3d, setIs3d] = useState<boolean>(false);
     const [config, setConfig] = useState<Partial<Config>>({
         scrollZoom: true,
@@ -92,6 +96,23 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             ..._layoutLabels
         })
     }, [visualizationData]);
+
+    useEffect(() => {
+        const resizeHandler = () => {
+            setLayout({
+                ...layout,
+                width: getPlotWidth(),
+                height: getPlotHeight(),
+            })
+        };
+    
+        window.addEventListener('resize', resizeHandler);
+    
+        // Cleanup function to remove the event listener when component unmounts
+        return () => {
+          window.removeEventListener('resize', resizeHandler);
+        };
+      }, []); // Empty dependency array ensures the effect runs only once
 
     const onModeChange = (e: DropdownChangeEvent) => {
         setselectedPlotMode(e.value)
