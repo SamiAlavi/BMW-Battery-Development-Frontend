@@ -48,7 +48,7 @@ export default function BottomNav() {
             <Dialog
                 visible={displayFileUploader}
                 header={'Upload File'}
-                style={{ width: '40vw', height: '22rem' }}
+                style={{ width: '40vw', height: '25rem' }}
                 onHide={() => setDisplayFileUploader(false)}
                 blockScroll={true}>
                 <div className="flex flex-wrap gap-3 mb-3">
@@ -62,10 +62,11 @@ export default function BottomNav() {
                     }
                 </div>
                 <FileUpload
-                    name="file"
+                    name="files"
                     url={'http://localhost:5000/upload'}
                     accept="*/*"
                     mode="advanced"
+                    multiple={true}
                     emptyTemplate={<p className="m-0">Drag and drop file here to upload.</p>} />    
             </Dialog>
         </div>
