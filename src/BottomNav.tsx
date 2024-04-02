@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Dock } from 'primereact/dock';
 import { Dialog } from 'primereact/dialog';
 import { MenuItem } from 'primereact/menuitem';
-import { FileUpload } from 'primereact/fileupload';
+import { FileUpload, FileUploadBeforeUploadEvent } from 'primereact/fileupload';
 import { Tooltip } from 'primereact/tooltip';
 import './BottomNav.css'
 import uploadImage from "./assets/upload-6699084.svg";
@@ -38,6 +38,10 @@ export default function BottomNav() {
         setType(type);
     }
 
+    const onBeforeUpload = (event: FileUploadBeforeUploadEvent) => {
+        // Add custom data to the FormData object
+        event.formData.append('type', type);
+      };
 
     return (
         <div className="dock">
@@ -67,7 +71,9 @@ export default function BottomNav() {
                     accept="*/*"
                     mode="advanced"
                     multiple={true}
-                    emptyTemplate={<p className="m-0">Drag and drop file here to upload.</p>} />    
+                    emptyTemplate={<p className="m-0">Drag and drop file here to upload.</p>}
+                    onBeforeUpload={onBeforeUpload}
+                    />    
             </Dialog>
         </div>
     );
