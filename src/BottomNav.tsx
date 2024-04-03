@@ -82,7 +82,7 @@ export default function BottomNav() {
     };
 
     const onTemplateRemove = (file: File, callback: Function) => {
-        setTotalSize(totalSize - file.size);
+        setTotalSize(Math.max(totalSize - file.size, 0));
         callback();
     };
 
