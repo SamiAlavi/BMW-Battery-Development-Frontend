@@ -11,7 +11,7 @@ import { Toast } from 'primereact/toast';
         
 
 export default function BottomNav() {
-    const [displayFileUploader, setDisplayFileUploader] = useState(true);
+    const [displayFileUploader, setDisplayFileUploader] = useState(false);
     const [type, setType] = useState<string>("capacity");
     
     const toast = useRef<Toast>(null);

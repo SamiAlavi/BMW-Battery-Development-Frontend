@@ -165,14 +165,18 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizat
             type: type,
             cols: cols,
         }
-        const response = await axiosInstance.post('visualize', body);
-
-        const visualizationData = {
-            ...body,
-            colsAxisMapping: colsAxisMapping,
-            data: response.data,
-        }
-        setVisualizationData(visualizationData)
+        axiosInstance.post('visualize', body)
+            .then((response) => {
+                const visualizationData = {
+                    ...body,
+                    colsAxisMapping: colsAxisMapping,
+                    data: response.data,
+                }
+                setVisualizationData(visualizationData)
+            })
+            .catch((error) => {
+                showToastError(error.response.data)
+            });
     }
 
 
