@@ -176,7 +176,7 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizat
     }
 
 
-    return (<>        
+    return (<>
         <Toast ref={toast} position="bottom-center" />
         <div className="sidebar-container">
             <Sidebar

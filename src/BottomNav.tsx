@@ -1,17 +1,20 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dock } from 'primereact/dock';
 import { Dialog } from 'primereact/dialog';
 import { MenuItem } from 'primereact/menuitem';
-import { FileUpload, FileUploadBeforeUploadEvent } from 'primereact/fileupload';
+import { FileUpload, FileUploadBeforeUploadEvent, FileUploadErrorEvent } from 'primereact/fileupload';
 import { Tooltip } from 'primereact/tooltip';
 import './BottomNav.css'
 import uploadImage from "./assets/upload-6699084.svg";
 import { RadioButton } from 'primereact/radiobutton';
+import { Toast } from 'primereact/toast';
         
 
 export default function BottomNav() {
     const [displayFileUploader, setDisplayFileUploader] = useState(true);
     const [type, setType] = useState<string>("capacity");
+    
+    const toast = useRef<Toast>(null);
 
     const dockItems: MenuItem[] = [
         {
@@ -38,13 +41,23 @@ export default function BottomNav() {
         setType(type);
     }
 
+    const showToastError = (message: string) => {
+        toast?.current?.show({severity:'error', summary: 'Error', detail:message, life: 10_000});
+    }
+
     const onBeforeUpload = (event: FileUploadBeforeUploadEvent) => {
         // Add custom data to the FormData object
         event.formData.append('type', type);
-      };
+    };
+
+    const onError = (event: FileUploadErrorEvent) => {
+        showToastError(event.xhr.responseText)
+    };
 
     return (
         <div className="dock">
+            <Toast ref={toast} position="bottom-center" />
+
             <Tooltip target=".p-dock-action" position="top" />
             <Dock
                 model={dockItems}
@@ -73,6 +86,7 @@ export default function BottomNav() {
                     multiple={true}
                     emptyTemplate={<p className="m-0">Drag and drop file here to upload.</p>}
                     onBeforeUpload={onBeforeUpload}
+                    onError={onError}                    
                     />    
             </Dialog>
         </div>
