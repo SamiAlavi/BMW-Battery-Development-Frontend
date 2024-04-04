@@ -71,6 +71,7 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             const indexes = generateArray(valuesLength)
             axis[label] = indexes
             _layoutLabels[`${label}axis`] = {title: label}
+            hovertemplate.push(`<b>${label}</b>: %{${label}}`)
         }
 
         const _data: Partial<PlotData> = {

@@ -146,6 +146,29 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizat
                 message: "Multiple columns cannot be mapped to same axis"
             }
         }
+
+        if (values.length === 1) {
+            ['X', 'Y'].forEach((val) => {
+                if (!values.includes(val)) {
+                    return {
+                        error: true,
+                        message: "1 selected column: X or Y axis must be chosen"
+                    }
+                }
+            })
+        }
+
+        if (values.length === 2) {
+            ['X', 'Y'].forEach((val) => {
+                if (!values.includes(val)) {
+                    return {
+                        error: true,
+                        message: "2 selected columns: X, Y axis must be chosen"
+                    }
+                }
+            })
+        }
+        
         return  {
             error: false,
             message: ""
