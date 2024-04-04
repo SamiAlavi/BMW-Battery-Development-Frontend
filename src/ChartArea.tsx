@@ -52,6 +52,7 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
         }
         const {data, type, colsAxisMapping} = visualizationData
         const axis: any = {}
+        const hovertemplate: string[] = []
         const _layout: Partial<Plotly.Layout> = { ...layout, title: type}
         let _layoutLabels: any = {}
         let valuesLength = 0
@@ -61,6 +62,7 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             axis[label] = values
             _layoutLabels[`${label}axis`] = {title: col}
             valuesLength = values.length
+            hovertemplate.push(`<b>${col}</b>: %{${label}}`)
         })
         
         const graphAxis = Object.keys(axis)
@@ -78,10 +80,12 @@ const ChartArea: React.FC<Props> = ({ visualizationData }) => {
             marker: {
                 size: 12,
                 line: {
-                color: 'rgba(217, 217, 217, 0.14)',
-                width: 0.5},
-                opacity: 0.8
+                    color: 'rgba(217, 217, 217, 0.14)',
+                    width: 0.5
+                },
+                opacity: 0.8,
             },
+            hovertemplate: hovertemplate.join('<br>')
         }
 
         _layoutLabels = {
