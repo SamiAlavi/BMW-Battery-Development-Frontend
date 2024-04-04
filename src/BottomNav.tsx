@@ -22,8 +22,8 @@ export default function BottomNav() {
 
     const dockItems: MenuItem[] = [
         {
-            label: 'Upload File',
-            icon: () => <img alt="Upload File" src={uploadImage} width="100%" />,
+            label: 'Upload Files',
+            icon: () => <img alt="Upload Files" src={uploadImage} width="100%" />,
             command: () => {
                 setDisplayFileUploader(true);
             },
