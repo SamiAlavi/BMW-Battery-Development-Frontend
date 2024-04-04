@@ -20,6 +20,8 @@ export default function BottomNav() {
     const fileUploadRef = useRef<FileUpload>(null);    
     const toast = useRef<Toast>(null);
 
+    const MAX_FILE_SIZE = 3*1024*1024;
+
     const dockItems: MenuItem[] = [
         {
             label: 'Upload Files',
@@ -167,7 +169,7 @@ export default function BottomNav() {
                 <Tooltip target=".custom-upload-btn" content="Upload" position="bottom" />
                 <Tooltip target=".custom-cancel-btn" content="Clear" position="bottom" />
 
-                <FileUpload ref={fileUploadRef} name="files" url="http://localhost:5000/upload" multiple accept="text/csv" maxFileSize={1024*1024}
+                <FileUpload ref={fileUploadRef} name="files" url="http://localhost:5000/upload" multiple accept="text/csv" maxFileSize={MAX_FILE_SIZE}
                     onUpload={onTemplateUpload} onSelect={onTemplateSelect} onError={onError} onClear={onTemplateClear}
                     headerTemplate={headerTemplate} itemTemplate={itemTemplate} emptyTemplate={emptyTemplate}
                     chooseOptions={chooseOptions} uploadOptions={uploadOptions} cancelOptions={cancelOptions}
