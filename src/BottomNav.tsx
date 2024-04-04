@@ -170,7 +170,7 @@ export default function BottomNav() {
                 <Tooltip target=".custom-upload-btn" content="Upload" position="bottom" />
                 <Tooltip target=".custom-cancel-btn" content="Clear" position="bottom" />
 
-                <FileUpload ref={fileUploadRef} name="files" url="http://localhost:5000/upload" multiple accept="*/*" maxFileSize={1000000}
+                <FileUpload ref={fileUploadRef} name="files" url="http://localhost:5000/upload" multiple accept="*/*" maxFileSize={1024*1024}
                     onUpload={onTemplateUpload} onSelect={onTemplateSelect} onError={onError} onClear={onTemplateClear}
                     headerTemplate={headerTemplate} itemTemplate={itemTemplate} emptyTemplate={emptyTemplate}
                     chooseOptions={chooseOptions} uploadOptions={uploadOptions} cancelOptions={cancelOptions}
