@@ -61,7 +61,11 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizat
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
-        };
+        };  
+        fetchData();
+    }, []);
+
+    useEffect(() => {
         const fetchColumnsCapacity = async () => {
             try {
                 const response = await axiosInstance.get('columns/capacity');
@@ -83,7 +87,6 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizat
             }
         };
   
-        fetchData();
         fetchColumnsCapacity();
         fetchColumnsCycle();
     }, []);
