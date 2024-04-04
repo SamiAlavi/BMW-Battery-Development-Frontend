@@ -54,9 +54,8 @@ export default function BottomNav() {
         event.formData.append('type', type);
     };
 
-    const onError = (event: FileUploadErrorEvent) => {
-        onTemplateClear()
-        showToastError(event.xhr.responseText)
+    const onError = (e: FileUploadErrorEvent) => {
+        showToastError(e.xhr.responseText)
     };
 
     const onTemplateSelect = (e: FileUploadSelectEvent) => {
@@ -78,7 +77,7 @@ export default function BottomNav() {
         });
 
         setTotalSize(_totalSize);
-        toast.current?.show({ severity: 'info', summary: 'Success', detail: 'Files Uploaded' });
+        toast.current?.show({ severity: 'info', summary: 'Success', detail: `${e.files.length} Files Uploaded` });
     };
 
     const onTemplateRemove = (file: File, callback: Function) => {
@@ -92,8 +91,7 @@ export default function BottomNav() {
 
     const headerTemplate = (options: FileUploadHeaderTemplateOptions) => {
         const { className, chooseButton, uploadButton, cancelButton } = options;
-        const value = totalSize / 10000;
-        const formatedValue = fileUploadRef && fileUploadRef.current ? fileUploadRef.current.formatSize(totalSize) : '0 B';
+        const formatedValue = fileUploadRef?.current?.formatSize(totalSize) ?? '0 B';
 
         return (
             <div className={className} style={{ backgroundColor: 'transparent', display: 'flex', alignItems: 'center' }}>
@@ -101,8 +99,7 @@ export default function BottomNav() {
                 {uploadButton}
                 {cancelButton}
                 <div className="flex align-items-center gap-3 ml-auto">
-                    <span>{formatedValue} / 1 MB</span>
-                    <ProgressBar value={value} showValue={false} style={{ width: '10rem', height: '12px' }}></ProgressBar>
+                    <span>{formatedValue}</span>
                 </div>
             </div>
         );
