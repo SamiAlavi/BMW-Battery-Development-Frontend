@@ -61,9 +61,11 @@ const SideBar: React.FC<Props> = ({ visible, onSidebarButtonClick, setVisualizat
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
-        };  
-        fetchData();
-    }, []);
+        };
+        if (visible) {
+            fetchData();
+        }
+    }, [visible]);
 
     useEffect(() => {
         const fetchColumnsCapacity = async () => {
