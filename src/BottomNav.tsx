@@ -61,7 +61,7 @@ export default function BottomNav() {
 
     const onTemplateSelect = (e: FileUploadSelectEvent) => {
         let _totalSize = totalSize;
-        let files = e.files;
+        const files = e.files;
 
         for (let i = 0; i < files.length; i++) {
             _totalSize += files[i].size || 0;
@@ -81,6 +81,7 @@ export default function BottomNav() {
         toast.current?.show({ severity: 'info', summary: 'Success', detail: `${e.files.length} Files Uploaded` });
     };
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     const onTemplateRemove = (file: File, callback: Function) => {
         setTotalSize(Math.max(totalSize - file.size, 0));
         callback();
