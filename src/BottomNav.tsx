@@ -9,7 +9,6 @@ import uploadImage from "./assets/upload-6699084.svg";
 import { RadioButton } from 'primereact/radiobutton';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
-import { ProgressBar } from 'primereact/progressbar';
 import { Tag } from 'primereact/tag';
         
 
