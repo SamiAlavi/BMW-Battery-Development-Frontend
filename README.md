@@ -1,6 +1,6 @@
 # BMW - Battery Development (Front End)
 
-For Backend, visit this [BMW---Battery-Development-Back-End-](https://github.com/SamiAlavi/BMW---Battery-Development-Back-End-).
+For Backend, visit this [BMW - Battery-Development (Backend)](https://github.com/SamiAlavi/BMW-Battery-Development-Backend).
 
 ## Setup
 
